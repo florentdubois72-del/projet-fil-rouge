@@ -9,11 +9,11 @@ pipeline {
         DOCKER_DIR = "./01_docker"
         DOCKER_IMAGE = "ic-webapp"
         DOCKER_TAG = "1.0"
-        DOCKERHUB_ID = "mlb78180"
+        DOCKERHUB_ID = "fld72"
         DOCKERHUB_PASSWORD = credentials('dockerhub_password')
         PORT_APP = "8080"
         PORT_EXT = "8090"
-        IP = "172.17.0.1"
+        IP = "172.31.0.71"
     }
     stages {
         stage('Build Image'){
