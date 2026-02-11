@@ -1,0 +1,54 @@
+*.pem
+*/*.pem
+**/*.pem
+
+._*
+*/._*
+**/._*
+
+*/build.app/*
+
+.terraform/*
+*/.terraform/*
+**/.terraform/*
+
+*.terraform.lock.*%
+*/*.terraform.lock.*%
+**/*.terraform.lock.*%
+
+*.tfstate.backup
+*/*.tfstate.backup
+**/*.tfstate.backup
+
+*.tfstate
+*/*.tfstate
+**/*.tfstate
+
+
+# Exclure les fichiers de configuration locaux
+.terraform/
+.terraform.lock.hcl
+./02_terraform/.terraform/*
+
+# Fichiers de variables sensibles (ne jamais versionner)
+# *.tfvars
+*.tfstate
+*.tfstate.*
+
+# Fichiers de sauvegarde générés par Terraform
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Fichiers de planification Terraform
+terraform.tfplan
+terraform.tfplan.*
+
+# Logs et fichiers de sortie
+*.log
+
+# Si vous utilisez des outils de débogage comme .DS_Store ou thumbs.db
+.DS_Store
+Thumbs.db

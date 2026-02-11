@@ -1,0 +1,11 @@
+services:
+  pgadmin4:
+    ports:
+      - 80:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=toto@toto.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+    image: dpage/pgadmin4
+    container_name: pgadmin
