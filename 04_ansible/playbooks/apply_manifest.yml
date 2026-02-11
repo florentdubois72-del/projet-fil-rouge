@@ -3,7 +3,7 @@
   hosts: localhost
   tasks: 
     - name: apply manifest file
-      command: "kubectl --kubeconfig=$PWD/04_ansible/kubeconfig/kubeconfig apply -k ~/projet-fil-rouge/03_kubernetes --validate=false "
+      command: "kubectl --kubeconfig=./04_ansible/kubeconfig apply -k ~/projet-fil-rouge/03_kubernetes --validate=false "
       
       #Suppression de la config sur K8S en cas d'erreur de port ou autre
       #command: "kubectl --kubeconfig=./kubeconfig-k3s.yml delete -k ~/projet-fil-rouge/03_kubernetes"
