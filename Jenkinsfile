@@ -1,4 +1,3 @@
-
 // /* import shared library. */
 // @Library('ulrich-shared-library')_
 
@@ -9,11 +8,11 @@ pipeline {
         DOCKER_DIR = "./01_docker"
         DOCKER_IMAGE = "ic-webapp"
         DOCKER_TAG = "1.0"
-        DOCKERHUB_ID = "fld72"
+        DOCKERHUB_ID = "ulrichsteve"
         DOCKERHUB_PASSWORD = credentials('dockerhub_password')
         PORT_APP = "8080"
         PORT_EXT = "8090"
-        IP = "172.31.0.71"
+        IP = "172.17.0.1"
     }
     stages {
         stage('Build Image'){
@@ -31,8 +30,7 @@ pipeline {
                     sh '''
                         docker ps -a | grep -i ${DOCKER_IMAGE} && docker rm -f  ${DOCKER_IMAGE}
                         docker run --name ${DOCKER_IMAGE} -dp $PORT_EXT:$PORT_APP ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
-                        sleep 10
-                        
+                        sleep 5
                         curl -I http://$IP:$PORT_EXT | grep -i "200"
                     '''
                 }
@@ -52,7 +50,6 @@ pipeline {
                 script {
                     // Dockerhub Registry
                     sh '''
-                        echo "Login and Push Image"
                         echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
                         docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
                     '''
@@ -64,15 +61,16 @@ pipeline {
             }
         }
         stage('Build Docker EC2'){
-             agent {
+            environment{
+                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
+            }
+            agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
                 }
             }
-            environment{
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            steps {
+            steps{
                 script {
                     sh '''
                         mkdir -p ~/.aws
@@ -80,7 +78,6 @@ pipeline {
                         echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
                         echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
                         chmod 400 ~/.aws/credentials
-                        sleep 30
                         cd 02_terraform/
                         terraform init 
                         terraform apply -var="stack=docker" -auto-approve
@@ -116,11 +113,7 @@ pipeline {
         //     }
         // }
         stage('Check File for docker') {
-            agent { 
-                docker { 
-                    image 'alpine:latest' 
-                } 
-            }
+            agent { docker { image 'alpine:latest' } }
             steps {
                 script {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
@@ -152,12 +145,14 @@ pipeline {
                     '''
                 }
             }
-        }       
+        }
+        
         stage('destroy Docker instance on AWS with terraform') {
             steps {
                 input message: "Confirmer vous la suppression de l'instance Docker  dans AWS ?", ok: 'Yes'
             }
         }
+
         stage('destroy Docker instance') {
             agent {
                 docker {
@@ -178,14 +173,14 @@ pipeline {
             }
         }
         stage('kubernetes ec2') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            }
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
                 }
+            }
+            environment {
+                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             }
             steps {
                 script {
@@ -205,11 +200,7 @@ pipeline {
             }
         }
         stage('Check File for k3s') {
-            agent { 
-                docker {
-                    image 'alpine:latest' 
-                } 
-            }
+            agent { docker { image 'alpine:latest' } }
             steps {
                 script {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
@@ -290,8 +281,6 @@ pipeline {
         }
     }
 }
-
-
 // post{
 //     always {
 //         script {
