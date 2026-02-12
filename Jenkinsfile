@@ -195,7 +195,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
-                    rgs '--entrypoint=""'
+                    args '--entrypoint=""'
                 }
             }
             environment {
@@ -284,7 +284,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
-                    rgs '--entrypoint=""'
+                    args '--entrypoint=""'
                 }
             }
             environment {
