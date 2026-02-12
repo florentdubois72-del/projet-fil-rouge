@@ -70,7 +70,7 @@ pipeline {
             }
             agent {
                 docker {
-                    image 'jenkins/jenkins-agent-terraform-2408'
+                    image 'dhi.io/jenkins:2.550-debian13-dev'
                 }
             }
             steps{
