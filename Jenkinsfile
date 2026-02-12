@@ -70,7 +70,7 @@ pipeline {
             }
             agent {
                 docker {
-                    image 'jenkins/jnlp-agent-terraform'
+                    image 'jenkins/jenkins-agent-terraform-2408'
                 }
             }
             steps{
