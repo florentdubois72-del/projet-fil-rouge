@@ -290,6 +290,7 @@ pipeline {
         }
     }
 }
+}
 
 // post{
 //     always {
