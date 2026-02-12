@@ -55,28 +55,42 @@ pipeline {
             }
         }
                 // ========== BLOC ENTIER AJOUTÉ ========== ← AJOUTÉ
-        stage('Clean Terraform State'){                // ← AJOUTÉ
-            agent {                                     // ← AJOUTÉ
-                docker {                                // ← AJOUTÉ
-                    image 'jenkins/jnlp-agent-terraform' // ← AJOUTÉ
-                    args '--entrypoint=""'              // ← AJOUTÉ
-                }                                       // ← AJOUTÉ
-            }                                           // ← AJOUTÉ
-            environment {                               // ← AJOUTÉ
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')          // ← AJOUTÉ
-                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')  // ← AJOUTÉ
-            }                                           // ← AJOUTÉ
-            steps{                                      // ← AJOUTÉ
-                script {                                // ← AJOUTÉ
-                    sh '''                              
-                        cd "./02_terraform/"           
-                        rm -rf .terraform terraform.tfstate* .terraform.lock.hcl  
-                        echo "Terraform state cleaned successfully"            
-                    '''                                 // ← AJOUTÉ
-                }                                       // ← AJOUTÉ
-            }                                           // ← AJOUTÉ
-        }                                               // ← AJOUTÉ
-        // ======================================== ← AJOUTÉ
+stage('Clean Terraform State'){
+    agent {
+        docker {
+            image 'jenkins/jnlp-agent-terraform'
+            args '--entrypoint=""'
+        }
+    }
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
+    }
+    steps{
+        script {
+            sh '''
+                mkdir -p ~/.aws
+                echo "[default]" > ~/.aws/credentials
+                echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+                echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+                chmod 400 ~/.aws/credentials
+                
+                cd "./02_terraform/"
+                
+                # Si le state existe, destroy les ressources
+                if [ -f terraform.tfstate ]; then
+                    terraform init
+                    terraform destroy -var="stack=docker" -auto-approve || true
+                fi
+                
+                # Nettoie le state local
+                rm -rf .terraform terraform.tfstate* .terraform.lock.hcl
+                
+                echo "Terraform state and AWS resources cleaned successfully"
+            '''
+        }
+    }
+}
         stage('Build Docker EC2'){
             environment{
                 AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
