@@ -77,8 +77,8 @@ pipeline {
                     sh '''
                         mkdir -p ~/.aws
                         echo "[default]" > ~/.aws/credentials
-                        echo -e "aws_access_key_id=$aws_access_key_id" >> ~/.aws/credentials
-                        echo -e "aws_secret_access_key=$aws_secret_access_key" >> ~/.aws/credentials
+                        echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+                        echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
                         chmod 400 ~/.aws/credentials
                         cd 02_terraform/
                         terraform init 
