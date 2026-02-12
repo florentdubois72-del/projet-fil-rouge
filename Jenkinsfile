@@ -47,22 +47,22 @@ pipeline {
                 }
             }
         }
-        stage('Login and Push Image'){
-            steps{
-                script {
+        //stage('Login and Push Image'){
+          //  steps{
+            //    script {
                     // Dockerhub Registry
-                    sh '''
-                        echo "Login and Push Image"
-                        echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
-                        docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
-                    '''
+              //      sh '''
+                //        echo "Login and Push Image"
+                  //      echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
+                    //    docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
+                    //'''
                     // Github Registry
                     // sh '''
                     //     echo $DOCKERHUB_PASSWORD | docker login ghcr.io -u $DOCKERHUB_ID --password-stdin
                     // '''
-                }
-            }
-        }
+                //}
+            //}
+        //}
         stage('Build Docker EC2'){
             environment{
                 AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
