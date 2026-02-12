@@ -53,13 +53,33 @@ pipeline {
                         echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
                         docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
                     '''
-                    // Github Registry
-                    // sh '''
-                    //     echo $DOCKERHUB_PASSWORD | docker login ghcr.io -u $DOCKERHUB_ID --password-stdin
-                    // '''
+
                 }
             }
         }
+                // ========== BLOC ENTIER AJOUTÉ ========== ← AJOUTÉ
+        stage('Clean Terraform State'){                // ← AJOUTÉ
+            agent {                                     // ← AJOUTÉ
+                docker {                                // ← AJOUTÉ
+                    image 'jenkins/jnlp-agent-terraform' // ← AJOUTÉ
+                    args '--entrypoint=""'              // ← AJOUTÉ
+                }                                       // ← AJOUTÉ
+            }                                           // ← AJOUTÉ
+            environment {                               // ← AJOUTÉ
+                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')          // ← AJOUTÉ
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')  // ← AJOUTÉ
+            }                                           // ← AJOUTÉ
+            steps{                                      // ← AJOUTÉ
+                script {                                // ← AJOUTÉ
+                    sh '''                              
+                        cd "./02_terraform/"           
+                        rm -rf .terraform terraform.tfstate* .terraform.lock.hcl  
+                        echo "Terraform state cleaned successfully"            
+                    '''                                 // ← AJOUTÉ
+                }                                       // ← AJOUTÉ
+            }                                           // ← AJOUTÉ
+        }                                               // ← AJOUTÉ
+        // ======================================== ← AJOUTÉ
         stage('Build Docker EC2'){
             environment{
                 AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
@@ -158,6 +178,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
+                    args '--entrypoint=""'
                 }
             }
             environment {
@@ -177,6 +198,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
+                    rgs '--entrypoint=""'
                 }
             }
             environment {
@@ -265,6 +287,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
+                    rgs '--entrypoint=""'
                 }
             }
             environment {
