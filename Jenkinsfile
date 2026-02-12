@@ -29,6 +29,7 @@ pipeline {
             steps{
                 script {
                     sh '''
+                        echo "Run and Test"
                         docker ps -a | grep -i ${DOCKER_IMAGE} && docker rm -f  ${DOCKER_IMAGE}
                         docker run --name ${DOCKER_IMAGE} -dp $PORT_EXT:$PORT_APP ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
                         sleep 10
@@ -42,6 +43,7 @@ pipeline {
             steps{
                 script {
                     sh '''
+                        echo "Stop and Delete Container"
                         docker ps -a | grep -i ${DOCKER_IMAGE} && docker rm -f  ${DOCKER_IMAGE}
                     '''
                 }
@@ -52,6 +54,7 @@ pipeline {
                 script {
                     // Dockerhub Registry
                     sh '''
+                        echo "Login and Push Image"
                         echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
                         docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
                     '''
@@ -75,11 +78,16 @@ pipeline {
             steps{
                 script {
                     sh '''
+                        echo "Build Docker EC2"
                         mkdir -p ~/.aws
                         echo "[default]" > ~/.aws/credentials
                         echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
                         echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+                        echo "************************"
+                        echo " $AWS_ACCESS_KEY_ID "
+                        echo "************************"
                         chmod 400 ~/.aws/credentials
+                        sleep 30
                         cd 02_terraform/
                         terraform init 
                         terraform apply -var="stack=docker" -auto-approve
