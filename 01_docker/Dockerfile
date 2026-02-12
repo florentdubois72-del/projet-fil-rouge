@@ -1,5 +1,5 @@
 #Bonjour
-FROM python:3.6-alpine
+FROM debian:python
 LABEL maintainer="FLD"
 WORKDIR /opt
 RUN pip install --upgrade pip
