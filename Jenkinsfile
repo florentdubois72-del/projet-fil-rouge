@@ -68,12 +68,23 @@ pipeline {
                 AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             }
+            
+            steps {
+                script {
+                    sh '''
+                        docker login
+                        sleep 30
+                    '''
+                }
+            }
+        
+                    
             agent {
                 docker {
                     image 'dhi/jenkins-inbound-agent'
                 }
             }
-            steps{
+            steps {
                 script {
                     sh '''
                         mkdir -p ~/.aws
