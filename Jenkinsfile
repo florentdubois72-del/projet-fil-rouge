@@ -70,7 +70,7 @@ pipeline {
             }
             agent {
                 docker {
-                    image 'dhi.io/jenkins:2.550-debian13-dev'
+                    image 'jenkins:2.550-debian13-dev'
                 }
             }
             steps{
