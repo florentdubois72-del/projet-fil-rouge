@@ -1,5 +1,5 @@
 #Bonjour
-FROM debian:python
+FROM python
 LABEL maintainer="FLD"
 WORKDIR /opt
 RUN pip install --upgrade pip
