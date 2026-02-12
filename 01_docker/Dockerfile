@@ -1,5 +1,5 @@
 #Bonjour
-FROM python
+FROM python:alpine3.23
 LABEL maintainer="FLD"
 WORKDIR /opt
 RUN pip install --upgrade pip
