@@ -55,7 +55,6 @@ pipeline {
                         echo "Login and Push Image"
                         echo $DOCKERHUB_PASSWORD | docker login -u ${DOCKERHUB_ID} --password-stdin
                         docker push ${DOCKERHUB_ID}/${DOCKER_IMAGE}:${DOCKER_TAG}
-                        docker login
                     '''
                     // Github Registry
                     // sh '''
@@ -71,7 +70,7 @@ pipeline {
             }                    
             agent {
                 docker {
-                    image 'dhi/jenkins-inbound-agent'
+                    image 'jenkins/jnlp-agent-terraform'
                 }
             }
             steps {
