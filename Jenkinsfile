@@ -42,7 +42,8 @@ pipeline {
             steps{
                 script {
                     sh '''
-                        docker ps -a | grep -i ${DOCKER_IMAGE} && docker rm -f  ${DOCKER_IMAGE}
+                        echo toto
+                        #docker ps -a | grep -i ${DOCKER_IMAGE} && docker rm -f  ${DOCKER_IMAGE}
                     '''
                 }
             }
