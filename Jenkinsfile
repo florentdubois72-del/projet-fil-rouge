@@ -145,7 +145,7 @@ stage('Clean Terraform State'){
         //     }
         // }
         stage('Check File for docker') {
-            agent { docker { image 'alpine:latest' } }
+            agent { docker { image 'debian:latest' } }
             steps {
                 script {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
@@ -234,7 +234,7 @@ stage('Clean Terraform State'){
             }
         }
         stage('Check File for k3s') {
-            agent { docker { image 'alpine:latest' } }
+            agent { docker { image 'debian:latest' } }
             steps {
                 script {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
@@ -316,10 +316,3 @@ stage('Clean Terraform State'){
         }
     }
 }
-// post{
-//     always {
-//         script {
-//             slackNotifier currentBuild.result
-//         }
-//     }
-// }    
