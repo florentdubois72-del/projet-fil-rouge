@@ -68,6 +68,7 @@ pipeline {
             agent {
                 docker {
                     image 'jenkins/jnlp-agent-terraform'
+                    args '--entrypoint=""'
                 }
             }
             steps{
