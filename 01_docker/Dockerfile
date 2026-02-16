@@ -2,8 +2,8 @@ ARG version="3.6-alpine"
 FROM python
 LABEL maintainer="FLD"
 WORKDIR /opt
-RUN apt update -y 
-RUN pip install --upgrade pip \
+RUN apt update -y \
+    && pip install --upgrade pip \
     && git clone https://github.com/florentdubois72-del/projet-fil-rouge.git /opt/ \
     && apt clean \
     && rm -rf /var/lib/apt/list/* \
