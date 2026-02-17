@@ -1,6 +1,3 @@
-// /* import shared library. */
-// @Library('ulrich-shared-library')_
-
 pipeline {
     agent any
     environment {
