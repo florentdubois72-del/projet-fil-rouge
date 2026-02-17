@@ -129,26 +129,26 @@ pipeline {
          //   }
    //     }
 
-        stage('destroy Docker instance') {
-            agent {
-                docker {
-                    image 'jenkins/jnlp-agent-terraform'
-                    args '--entrypoint=""'
-                }
-            }
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            }
-            steps {
-                script {
-                    sh '''
-                        cd "./02_terraform/"
-                        terraform destroy --var="stack=docker" --auto-approve
-                    '''
-                }
-            }
-        }
+   //     stage('destroy Docker instance') {
+     //       agent {
+       //         docker {
+         //           image 'jenkins/jnlp-agent-terraform'
+           //         args '--entrypoint=""'
+             //   }
+        //    }
+          //  environment {
+            //    AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
+              //  AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
+       //     }
+         //   steps {
+           //     script {
+             //       sh '''
+               //         cd "./02_terraform/"
+                 //       terraform destroy --var="stack=docker" --auto-approve
+             //       '''
+             //   }
+      //      }
+  //      }
         stage('kubernetes ec2') {
             agent {
                 docker {
