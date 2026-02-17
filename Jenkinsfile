@@ -92,6 +92,7 @@ pipeline {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
                     sh '''
                         echo "Checking file in Check File stage..."
+                        echo "Un peu de clean"
                         sed -n '$p' cat  "04_ansible/host_vars/docker.yaml" > "04_ansible/host_vars/docker.yaml"
                         cat  "04_ansible/host_vars/docker.yaml"
                         sleep 100
