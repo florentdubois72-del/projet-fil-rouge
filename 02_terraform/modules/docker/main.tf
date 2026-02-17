@@ -1,0 +1,29 @@
+resource "aws_instance" "ec2_project" {
+  ami                         = var.ami
+  key_name                    = var.key_name
+  instance_type               = var.instance_type
+  security_groups             = ["${var.security_groups_name}"]
+  associate_public_ip_address = true
+  root_block_device {
+    volume_size           = 20
+    volume_type           = "gp3"
+    encrypted             = true
+    delete_on_termination = true
+  }
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = var.username
+      private_key = file(var.private_key_path)
+      host        = self.public_ip
+    }
+    scripts = ["./scripts/docker.sh"]
+  }
+  provisioner "local-exec" {
+    command = "mkdir -p ../04_ansible/host_vars/; echo -e '\nansible_host: ${self.public_ip}' >> ../04_ansible/host_vars/docker.yaml"
+  }
+
+  tags = {
+    Name = var.instance_name
+  }
+}
