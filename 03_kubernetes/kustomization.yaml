@@ -1,6 +1,0 @@
-resources:
-  - ./namespace
-  - ./postgres
-  - ./odoo
-  - ./pgadmin 
-  - ./ic-webapp

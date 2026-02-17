@@ -1,7 +1,0 @@
-resources:
-  - pgadmin-cm.yml
-  - pgadmin-pv.yml
-  - pgadmin-pvc.yml
-  - pgadmin-secret.yml
-  - pgadmin-deploy.yml
-  - pgadmin-svc.yml
