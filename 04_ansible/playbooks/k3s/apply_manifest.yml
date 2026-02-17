@@ -1,0 +1,10 @@
+---
+- name: apply or delete kubernetes manifest file 
+  hosts: localhost
+  tasks: 
+    - name: apply manifest file
+      command: "kubectl --kubeconfig=/home/ubuntu/projet-fil-rouge/04_ansible/playbooks/k3s/kubeconfig-k3s.yml apply -k ~/projet-fil-rouge/03_kubernetes --validate=false" 
+
+      #Suppression de la config sur K8S en cas d'erreur de port ou autre
+      #command: "kubectl --kubeconfig=./kubeconfig-k3s.yml delete -k ~/projet-fil-rouge/03_kubernetes"
+
