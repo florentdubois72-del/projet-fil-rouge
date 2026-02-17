@@ -88,29 +88,29 @@ pipeline {
         }
 
 
-        stage('Check File for docker') {
-            agent { docker { image 'alpine:latest' } }
-            steps {
-                script {
+        //stage('Check File for docker') {
+        //    agent { docker { image 'alpine:latest' } }
+         //   steps {
+           //     script {
                     // Vérification que les modifications dans le fichier sont présentes dans ce stage
-                    sh '''
-                        echo "Checking file in Check File stage..."
-                        cat  "04_ansible/host_vars/docker.yaml"
-                    '''
-                }
-            }
-        }
-        stage('deploy on docker instance') {
-            steps {
-                input message: "Confirmer vous le deploiement Sur l'instance Docker ?", ok: 'Yes'
-            }
-        }
-        stage('ansible deploy on  Docker instance'){
-            agent {
-                docker {
-                    image  'registry.gitlab.com/robconnolly/docker-ansible:latest'
-                }
-            }
+             //       sh '''
+               //         echo "Checking file in Check File stage..."
+                 //       cat  "04_ansible/host_vars/docker.yaml"
+                  //  '''
+               // }
+           // }
+       // }
+     //   stage('deploy on docker instance') {
+       //     steps {
+         //       input message: "Confirmer vous le deploiement Sur l'instance Docker ?", ok: 'Yes'
+      //      }
+     //   }
+      //  stage('ansible deploy on  Docker instance'){
+        //    agent {
+          //      docker {
+            //        image  'registry.gitlab.com/robconnolly/docker-ansible:latest'
+              //  }
+      //      }
          //   steps{
            //     script {
              //       sh '''
@@ -121,13 +121,13 @@ pipeline {
                    // '''
                // }
            // }
-        }
+       // }
         
-        stage('destroy Docker instance on AWS with terraform') {
-            steps {
-                input message: "Confirmer vous la suppression de l'instance Docker  dans AWS ?", ok: 'Yes'
-            }
-        }
+   //     stage('destroy Docker instance on AWS with terraform') {
+     //       steps {
+       //         input message: "Confirmer vous la suppression de l'instance Docker  dans AWS ?", ok: 'Yes'
+         //   }
+   //     }
 
         stage('destroy Docker instance') {
             agent {
