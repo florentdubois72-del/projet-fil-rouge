@@ -198,6 +198,7 @@ pipeline {
             agent {
                 docker {
                     image  'registry.gitlab.com/robconnolly/docker-ansible:latest'
+                    args '--entrypoint=""'
                 }
             }
             steps{
