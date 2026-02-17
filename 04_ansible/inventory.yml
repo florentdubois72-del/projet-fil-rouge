@@ -1,6 +1,0 @@
-all:
-  children:
-    prod: 
-      hosts:
-        k3s:
-        docker:
