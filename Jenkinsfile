@@ -86,33 +86,8 @@ pipeline {
                 }
             }
         }
-        // stage('Docker ec2') {
-        //     agent {
-        //         docker {
-        //             image 'jenkins/jnlp-agent-terraform'
-        //         }
-        //     }
-        //     environment {
-        //         AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-        //         AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-        //     }
-        //     steps {
-        //         script {
-        //             sh '''
-        //                 echo "Generating aws credentials"
-        //                 echo "Deleting older if exist"
-        //                 mkdir -p ~/.aws
-        //                 echo "[default]" > ~/.aws/credentials
-        //                 echo -e "aws_access_key_id=$AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-        //                 echo -e "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-        //                 chmod 400 ~/.aws/credentials
-        //                 cd "./02_terraform/"
-        //                 terraform init 
-        //                 terraform apply --var="stack=docker" --auto-approve
-        //             '''
-        //         }
-        //     }
-        // }
+
+
         stage('Check File for docker') {
             agent { docker { image 'alpine:latest' } }
             steps {
@@ -136,16 +111,16 @@ pipeline {
                     image  'registry.gitlab.com/robconnolly/docker-ansible:latest'
                 }
             }
-            steps{
-                script {
-                    sh '''
-                        cat  "04_ansible/host_vars/docker.yaml"
-                        cd "04_ansible/"
-                        ansible docker -m ping --private-key ../02_terraform/keypair/docker.pem
-                        ansible-playbook playbooks/docker/main.yaml --private-key ../02_terraform/keypair/docker.pem
-                    '''
-                }
-            }
+         //   steps{
+           //     script {
+             //       sh '''
+               //         cat  "04_ansible/host_vars/docker.yaml"
+                 //       cd "04_ansible/"
+                   //     ansible docker -m ping --private-key ../02_terraform/keypair/docker.pem
+                     //   ansible-playbook playbooks/docker/main.yaml --private-key ../02_terraform/keypair/docker.pem
+                   // '''
+               // }
+           // }
         }
         
         stage('destroy Docker instance on AWS with terraform') {
